@@ -811,10 +811,14 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > \
 
 > and overall restore status:
-> **velero restore get**
-> NAME                   BACKUP            STATUS       WARNINGS   ERRORS   CREATED                         SELECTOR
-> restore-ghost-backup   ghost-backup-ok   InProgress   0          0        2020-07-16 21:23:38 +0000 UTC   <none>
-
+>**velero restore get**
+>
+>NAME                   BACKUP            STATUS       WARNINGS   ERRORS   CREATED                         SELECTOR
+>restore-ghost-backup   ghost-backup-ok   **InProgress**   0          0        2020-07-16 21:23:38 +0000 UTC   <none>
+>
+>NAME                   BACKUP            STATUS       WARNINGS   ERRORS   CREATED                         SELECTOR
+>restore-ghost-backup    ghost-backup-ok   **Completed**    0          0        2020-07-16 21:23:38 +0000 UTC   <none>
+    
 4.  Check status of restored namespace, PVC, deployments, pods and
     services in the target namespace: 
 
