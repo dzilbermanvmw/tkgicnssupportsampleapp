@@ -440,21 +440,19 @@ NOTE: datastoreurl should point to a folder in the associated vSphere
     (ghost-claim.yaml sample deployment descriptor is included into the
     'samples' repository folder)
 ```yaml
-> kind: PersistentVolumeClaim\
-> apiVersion: v1\
-> metadata:\
->   name: blog-content-new\
->   namespace: ghost\
->   annotations:\
->    
-> [volume.beta.kubernetes.io/storage-class](http://volume.beta.kubernetes.io/storage-class):
-> demo-sts-sc\
-> spec:\
->   accessModes:\
->     - ReadWriteOnce\
->   resources:\
->     requests:\
->       storage: 2Gi
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: blog-content-new
+  namespace: ghost
+  annotations:
+    volume.beta.kubernetes.io/storage-class: demo-sts-sc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
 ```
 >
 
