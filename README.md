@@ -478,92 +478,61 @@ NOTE: datastoreurl should point to a folder in the associated vSphere
     below):
 ```yaml
 apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: blog
+  name: blog
+  namespace: ghost
+spec:
+  ports:
+    - port: 80
+      targetPort: 2368
+  selector:
+    app: blog
+  type: LoadBalancer
 
-> kind: Service
->
-> metadata:
->
-> labels:
-> name: blog
-> name: blog
-> namespace: ghost
->
-> spec:
->
-> ports:
-> \- port: 80
-> targetPort: 2368
->
-> selector:
-> app: blog
-> type: LoadBalancer
->
-> \-\--
->
-> apiVersion: apps/v1
-> kind: Deployment
-> metadata:
-> name: blog
->
-> namespace: ghost
->
-> labels:
->
-> app: blog
->
-> spec:
->
-> replicas: 1
->
-> selector:
->
-> matchLabels:
->
-> app: blog
->
-> template:
->
-> metadata:
->
-> labels:
->
-> app: blog
->
-> spec:
->
-> containers:
->
-> \- name: blog
->
-> image: ghost:latest
->
-> imagePullPolicy: Always
->
-> ports:
->
-> \- containerPort: 2368
->
-> env:
->
-> \- name: url
->
-> **value: <http://my-blog.acelab.local> needs to be registered in DNS**
->
-> volumeMounts:
->
-> \- mountPath: /var/lib/ghost/content
->
-> name: content
->
-> volumes:
->
-> \- name: content
->
-> persistentVolumeClaim:
->
-> **claimName: blog-content-new needs to match PVC name created in the
-> previous step**
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog
+  namespace: ghost
+  labels:
+    app: blog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog
+  template:
+    metadata:
+      labels:
+        app: blog
+    spec:
+      containers:
+      - name: blog
+        image: ghost:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 2368
+        env:
+        - name: url
+          value: http://my-blog.acelab.local
+        volumeMounts:
+        - mountPath: /var/lib/ghost/content
+          name: content
+      volumes:
+      - name: content
+        persistentVolumeClaim:
+          claimName: blog-content-new
+
 ```
+> NOTES:
+> - Value of 'url' environment variable should have a DNS record 
+> - 'claimName' should match name of PVC created in earlier steps
+
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
 **kubectl apply -f ghost-new.yaml**
