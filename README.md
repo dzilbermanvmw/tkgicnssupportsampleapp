@@ -35,11 +35,11 @@ Introduction
 
 This document is a quick start guide for enabling CNS volume support on
 a Tanzu Kubernetes Grid Integrated (TKGI, formerly known as Enterprise
-PKS) Kubernetes clusters and deploying applications using persistent
+PKS) Kubernetes clusters and deploying applications that use persistent
 volumes. This document will provide details on configuration of CSI
 drivers in designated K8s cluster, deployment a stateful application
-using K8s storage class with CSI driver (OPTIONAL: and backing it
-up/restoring using Velero open source solution.
+using K8s storage class with CSI driver. Finally, there is an overview of 
+steps to back up/restoring that aplication using Velero open source solution.
 
 Note: thanks to [Alexander
 Ullah](mailto:aullah@vmware.com?subject=Thanks%20for%20publishing%20TKG*%20CSI%20%22how%20to%22%20blog!)
@@ -158,7 +158,7 @@ NOTES:
 2.  Create RBAC objects for CSI access based on provided sample
     deployment file (*vsphere-csi-controller-rbac.yaml* included into
     'samples' repository folder, partially shown below)
-
+```yaml
 > kind: ServiceAccount
 >
 > apiVersion: v1
@@ -189,6 +189,7 @@ NOTES:
 >
 > ....
 >
+```
 > **kubectl apply -f vsphere-csi-controller-rbac.yaml**
 >
 > serviceaccount/vsphere-csi-controller created\
@@ -390,7 +391,7 @@ initialization of vsphere-csi-controller:
 
 1.  Create storage class that is using CSI driver (using csi-sc.yaml
     deployment descriptor file available in 'samples' folder)
-
+```yaml
 > apiVersion: [storage.k8s.io/v1](http://storage.k8s.io/v1)\
 > kind: StorageClass\
 > metadata:\
@@ -404,7 +405,9 @@ initialization of vsphere-csi-controller:
 >   datastoreurl:
 > \"[ds:///vmfs/volumes/13e49faf-a5872633/](ds://confluence.eng.vmware.com/vmfs/volumes/13e49faf-a5872633/)\"
 >
-> NOTE: datastoreurl should point to a folder in the associated vSphere
+```
+> 
+NOTE: datastoreurl should point to a folder in the associated vSphere
 > data store:
 >
 > ![](./media/image1.png){width="5.603571741032371in"
@@ -428,7 +431,7 @@ initialization of vsphere-csi-controller:
 2.  Create PVS using SC above and deploy Ghost app based on that PVC
     (ghost-claim.yaml sample deployment descriptor is included into the
     'samples' repository folder)
-
+```yaml
 > kind: PersistentVolumeClaim\
 > apiVersion: v1\
 > metadata:\
@@ -444,7 +447,9 @@ initialization of vsphere-csi-controller:
 >   resources:\
 >     requests:\
 >       storage: 2Gi
+```
 >
+
 > Run the following command:
 >
 > **kubectl apply -f ghost-claim.yaml**
@@ -471,7 +476,7 @@ initialization of vsphere-csi-controller:
 3.  Deploy Ghost stateful application (using *ghost-new.yaml* sample
     deployment descriptor file found in the 'samples' folder, shown
     below):
-
+```yaml
 apiVersion: v1
 
 > kind: Service
@@ -479,35 +484,25 @@ apiVersion: v1
 > metadata:
 >
 > labels:
->
 > name: blog
->
 > name: blog
->
 > namespace: ghost
 >
 > spec:
 >
 > ports:
->
 > \- port: 80
->
 > targetPort: 2368
 >
 > selector:
->
 > app: blog
->
 > type: LoadBalancer
 >
 > \-\--
 >
 > apiVersion: apps/v1
->
 > kind: Deployment
->
 > metadata:
->
 > name: blog
 >
 > namespace: ghost
@@ -568,7 +563,7 @@ apiVersion: v1
 >
 > **claimName: blog-content-new needs to match PVC name created in the
 > previous step**
-
+```
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
 **kubectl apply -f ghost-new.yaml**
@@ -601,9 +596,8 @@ apiVersion: v1
 Navigate to the URL defined by EXTERNAL-IP address of LoadBalancer
 service:
 
-> ![](./media/image3.png){width="6.045113735783027in"
-> height="3.8285717410323707in"}
->
+> ![](./media/image3.png)
+
 > Now we can start using the Blog application as it is intedned --
 > posting blogs etc.
 
@@ -883,8 +877,7 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > Ghost app and check its availability (may need to update the DNS
 > record matching URL specified in deployment descriptor):
 >
-> ![](./media/image4.png){width="5.674956255468066in"
-> height="4.952975721784777in"}
+> ![](./media/image4.png)
 
  Troubleshooting Notes
 ---------------------
@@ -1004,11 +997,4 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > **Resolution**:  make sure all nodes in K8s cluster are running and
 > pods can be scheduled on them, wait for scheduler to retry (??)
 
-Conclusion
-----------
 
-We hope this document was useful. As you try these configuration steps,
-please provide any feedback or questions in the comments section for
-this document on [code.vmware.com](https://code.vmware.com). Also,
-please let us know if you have any suggestions or if you would like to
-see guidance on other topics
