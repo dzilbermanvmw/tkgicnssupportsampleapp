@@ -809,6 +809,7 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 >
 > \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 > \
+
 > and overall restore status:
 > **velero restore get**
 > NAME                   BACKUP            STATUS       WARNINGS   ERRORS   CREATED                         SELECTOR
