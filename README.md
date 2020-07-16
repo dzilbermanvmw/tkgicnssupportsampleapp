@@ -405,21 +405,20 @@ initialization of vsphere-csi-controller:
     deployment descriptor file available in 'samples' folder)
 ```yaml
 apiVersion: storage.k8s.io/v1
-kind: StorageClass  
-metadata:  
-  name: demo-sts-storageclass  
-  annotations:  
-      storageclass.kubernetes.io/is-default-class: "true"  
+kind: StorageClass
+metadata:
+  name: demo-sts-sc
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
 provisioner: csi.vsphere.vmware.com
-parameters:  
-  datastoreurl: "ds:///vmfs/volumes/5e66e525-8e46bd39-c184-005056ae28de/"
+parameters:
+  datastoreurl: "ds:///vmfs/volumes/13e49faf-a5872633/"
 ```
 > 
 NOTE: datastoreurl should point to a folder in the associated vSphere
 > data store:
 >
-> ![](./media/image1.png){width="5.603571741032371in"
-> height="2.5470778652668415in"}
+> ![](./media/image1.png)
 >
 > **kubectl apply -f csi-sc-dan.yaml -n ghost**
 >
