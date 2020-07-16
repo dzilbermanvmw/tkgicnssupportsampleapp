@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass  
+metadata:  
+  name: demo-sts-sc  
+  annotations:  
+    storageclass.kubernetes.io/is-default-class: "true"  
+provisioner: csi.vsphere.vmware.com
+parameters:
+  datastoreurl: "ds:///vmfs/volumes/13e49faf-a5872633/"

@@ -1,0 +1,14 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: blog-content-new
+  namespace: ghost
+  annotations:
+    volume.beta.kubernetes.io/storage-class: demo-sts-sc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
