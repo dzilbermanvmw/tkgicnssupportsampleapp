@@ -563,18 +563,18 @@ spec:
 .......
 
 Navigate to the URL defined by EXTERNAL-IP address of LoadBalancer
-service to access the Ghost application
+service (and corresponding DNS record) to access the Ghost application:
 
-> ![](./media/image3.png)
+> ![](./media/image7.png)
 
-> Now we can start using the Blog application as it is intedned --
+> Now we can start using the Ghost application as it is intended --
 > posting blogs etc.
 
-Install Velero Backup/Restore Solution w/support for CSI Volume Snapshots
+Install Velero Backup/Restore Solution w/Support for CSI Volume Snapshots
 ------------------------------------------------------------------------
 NOTE: please see Velero project documentation (https://github.com/vmware-tanzu/velero/) for general functionality and architecture of that solution:
 
-1.  Install miniIO for local object store using [Helm3
+1.  Install miniIO for S3 compatible local object store using [Helm3
     chart](https://bitnami.com/stack/minio/helm) from VMware Bitnami:
 
 > helm install minio-release -n minio \\
@@ -597,7 +597,7 @@ NOTE: please see Velero project documentation (https://github.com/vmware-tanzu/v
 >
 > **\
 > **use outputs of those commands in **credentials** file to provide
-> access to S3 object store (minIO) shown below:
+> access to minIO object store shown below:
 >
 > \[default\]
 >
@@ -605,7 +605,7 @@ NOTE: please see Velero project documentation (https://github.com/vmware-tanzu/v
 >   aws\_secret\_access\_key=minio123
 
 2.  Use the following shell command script to install Velero w/support for
-    CSI:
+    CSI (*install_velero_csi.sh* file in the 'samoles' folder, also shown below):
 
 > export BUCKET=velero\
 > export REGION=minio\
@@ -614,13 +614,13 @@ NOTE: please see Velero project documentation (https://github.com/vmware-tanzu/v
 >   \--bucket \$BUCKET \\\
 >   \--secret-file ./credentials \\\
 >   \--backup-location-config
-> region=\$REGION,s3ForcePathStyle=\"true\",s3Url=<http://MINIO IP:PORT>
+> region=\$REGION,s3ForcePathStyle=\"true\",s3Url=<http://MINIO_IP:PORT>
 > \\\
 >   \--snapshot-location-config region=\$REGION \\\
 >   \--plugins velero/velero-plugin-for-aws:v1.1.0
 >
 > Follow <https://github.com/vmware-tanzu/velero-plugin-for-vsphere> to
-> install vSphere snapshot plugin (v 1.0.1!)
+> install vSphere volume snapshot plugin
 
 3.  Add vSphere volume snapshot plugin, latest version (1.0.1 at the time of writing):
 
