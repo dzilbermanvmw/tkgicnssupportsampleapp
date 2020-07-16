@@ -931,8 +931,16 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > persistentVolume=pvc-f9ec1bce-c2c1-4477-b118-e3b333a57151
 > resource=persistentvolumes volumeSnapshotLocation=vsl-vsphere-dz
 >
-> **Resolution**:  (worked after a few retries)
->
+> **Resolution**:  verify that VolumeSnapshotter plugin is indeed deployed:
+> velero plugin get
+> NAME                                 KIND
+> velero.io/crd-remap-version          BackupItemAction
+> ...
+> velero.io/service-account            RestoreItemAction
+> velero.io/aws                        VolumeSnapshotter
+> velero.io/vsphere                    VolumeSnapshotter
+> 
+> and retry backup request.
 > 3\. Examine events when restoring application from backup:
 >
 > ** kubectl get events -n ghost**\
