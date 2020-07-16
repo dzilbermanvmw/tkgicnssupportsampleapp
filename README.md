@@ -158,7 +158,7 @@ NOTES:
 2.  Create RBAC objects for CSI access based on provided sample
     deployment file (*vsphere-csi-controller-rbac.yaml* included into
     'samples' repository folder, partially shown below)
-
+```yaml
 > kind: ServiceAccount
 >
 > apiVersion: v1
@@ -189,6 +189,7 @@ NOTES:
 >
 > ....
 >
+```
 > **kubectl apply -f vsphere-csi-controller-rbac.yaml**
 >
 > serviceaccount/vsphere-csi-controller created\
@@ -390,7 +391,7 @@ initialization of vsphere-csi-controller:
 
 1.  Create storage class that is using CSI driver (using csi-sc.yaml
     deployment descriptor file available in 'samples' folder)
-
+```yaml
 > apiVersion: [storage.k8s.io/v1](http://storage.k8s.io/v1)\
 > kind: StorageClass\
 > metadata:\
@@ -404,7 +405,9 @@ initialization of vsphere-csi-controller:
 >   datastoreurl:
 > \"[ds:///vmfs/volumes/13e49faf-a5872633/](ds://confluence.eng.vmware.com/vmfs/volumes/13e49faf-a5872633/)\"
 >
-> NOTE: datastoreurl should point to a folder in the associated vSphere
+```
+> 
+NOTE: datastoreurl should point to a folder in the associated vSphere
 > data store:
 >
 > ![](./media/image1.png){width="5.603571741032371in"
@@ -428,7 +431,7 @@ initialization of vsphere-csi-controller:
 2.  Create PVS using SC above and deploy Ghost app based on that PVC
     (ghost-claim.yaml sample deployment descriptor is included into the
     'samples' repository folder)
-
+```yaml
 > kind: PersistentVolumeClaim\
 > apiVersion: v1\
 > metadata:\
@@ -444,7 +447,9 @@ initialization of vsphere-csi-controller:
 >   resources:\
 >     requests:\
 >       storage: 2Gi
+```
 >
+
 > Run the following command:
 >
 > **kubectl apply -f ghost-claim.yaml**
@@ -471,7 +476,7 @@ initialization of vsphere-csi-controller:
 3.  Deploy Ghost stateful application (using *ghost-new.yaml* sample
     deployment descriptor file found in the 'samples' folder, shown
     below):
-
+```yaml
 apiVersion: v1
 
 > kind: Service
@@ -479,35 +484,25 @@ apiVersion: v1
 > metadata:
 >
 > labels:
->
 > name: blog
->
 > name: blog
->
 > namespace: ghost
 >
 > spec:
 >
 > ports:
->
 > \- port: 80
->
 > targetPort: 2368
 >
 > selector:
->
 > app: blog
->
 > type: LoadBalancer
 >
 > \-\--
 >
 > apiVersion: apps/v1
->
 > kind: Deployment
->
 > metadata:
->
 > name: blog
 >
 > namespace: ghost
@@ -568,7 +563,7 @@ apiVersion: v1
 >
 > **claimName: blog-content-new needs to match PVC name created in the
 > previous step**
-
+```
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
 **kubectl apply -f ghost-new.yaml**
