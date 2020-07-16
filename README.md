@@ -799,8 +799,8 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > Resources:\
 >   Included:        \*\
 >   Excluded:        nodes, events,
-> [events.events.k8s.io],[backups.velero.io],
-> [restores.velero.io],[resticrepositories.velero.io]\
+> events.events.k8s.io,backups.velero.io,
+> restores.velero.io,resticrepositories.velero.io\
 >   Cluster-scoped:  auto\
 > \
 > Namespace mappings:  \<none\>\
@@ -808,6 +808,10 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > Restore PVs:  auto
 >
 > \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
+> and overall status:
+> **velero restore get**
+NAME                   BACKUP            STATUS       WARNINGS   ERRORS   CREATED                         SELECTOR
+restore-ghost-backup   ghost-backup-ok   InProgress   0          0        2020-07-16 21:23:38 +0000 UTC   <none>
 
 4.  Check status of restored namespace, PVC, deployments, pods and
     services in the target namespace: 
