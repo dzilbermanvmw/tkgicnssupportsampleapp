@@ -52,6 +52,8 @@ Overview
 Cloud Native Storage (CNS) (https://docs.vmware.com/en/VMware-vSphere/6.7/Cloud-Native-Storage/GUID-CF1D7196-E49C-4430-8C50-F8E35CAAE060.html) provides comprehensive data management for stateful, containerized apps, enabling them to survive restarts and
 outages.
 
+![](./media/image5.png)
+
 CNS vSphere offers the following two components:
 
 -   CNS in vCenter Server
@@ -105,12 +107,9 @@ Prerequisites for CNS with TGKI
 (See <https://docs.pivotal.io/pks/1-7/vsphere-cns.html> for complete
 list of pre-requisites)
 
-Install CSI Driver on a TGKI Cluster
+Install CSI Driver on a TGKI K8s Cluster
 ------------------------------------
-
-Follow documentation: <https://docs.pivotal.io/pks/1-7/vsphere-cns.html>
-and use configuration files provided in the 'samples' folder of this repository
-
+NOTE: below steps were validated using TKGI 1.7.0 and 1.8.0 releases
 
 1.  Create CSI Secret for vSphere based on provided sample deployment file
     (*csi-vsphere.conf*)
