@@ -159,36 +159,48 @@ NOTES:
     deployment file (*vsphere-csi-controller-rbac.yaml* included into
     'samples' repository folder, partially shown below)
 ```yaml
-> kind: ServiceAccount
->
-> apiVersion: v1
->
-> metadata:
->
-> name: vsphere-csi-controller
->
-> namespace: kube-system
->
-> \-\--
->
-> kind: ClusterRole
->
-> apiVersion: rbac.authorization.k8s.io/v1
->
-> metadata:
->
-> name: vsphere-csi-controller-role
->
-> rules:
->
-> \- apiGroups: \[\"\"\]
->
-> resources: \[\"nodes\", \"persistentvolumeclaims\", \"pods\"\]
->
-> verbs: \[\"get\", \"list\", \"watch\"\]
->
-> ....
->
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: vsphere-csi-controller
+  namespace: kube-system
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: vsphere-csi-controller-role
+rules:
+  - apiGroups: [""]
+    resources: ["nodes", "persistentvolumeclaims", "pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["persistentvolumes"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["storageclasses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["csinodes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["volumeattachments"]
+    verbs: ["get", "list", "watch", "update"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: vsphere-csi-controller-binding
+subjects:
+  - kind: ServiceAccount
+    name: vsphere-csi-controller
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: vsphere-csi-controller-role
+  apiGroup: rbac.authorization.k8s.io
 ```
 > **kubectl apply -f vsphere-csi-controller-rbac.yaml**
 >
@@ -389,22 +401,18 @@ initialization of vsphere-csi-controller:
 > using PVC (source code available from
 > <https://github.com/beyondelastic/velero_vSphere>)
 
-1.  Create storage class that is using CSI driver (using csi-sc.yaml
+1.  Create storage class that is using CSI driver (using demo-csi-strage-class.yaml
     deployment descriptor file available in 'samples' folder)
 ```yaml
-> apiVersion: [storage.k8s.io/v1](http://storage.k8s.io/v1)\
-> kind: StorageClass\
-> metadata:\
->   name: demo-sts-sc\
->   annotations:\
->    
-> [storageclass.kubernetes.io/is-default-class](http://storageclass.kubernetes.io/is-default-class):
-> \"true\"\
-> provisioner: [csi.vsphere.vmware.com](http://csi.vsphere.vmware.com)\
-> parameters:\
->   datastoreurl:
-> \"[ds:///vmfs/volumes/13e49faf-a5872633/](ds://confluence.eng.vmware.com/vmfs/volumes/13e49faf-a5872633/)\"
->
+apiVersion: storage.k8s.io/v1
+kind: StorageClass  
+metadata:  
+  name: demo-sts-storageclass  
+  annotations:  
+      storageclass.kubernetes.io/is-default-class: "true"  
+provisioner: csi.vsphere.vmware.com
+parameters:  
+  datastoreurl: "ds:///vmfs/volumes/5e66e525-8e46bd39-c184-005056ae28de/"
 ```
 > 
 NOTE: datastoreurl should point to a folder in the associated vSphere
@@ -837,7 +845,7 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > NAME           TYPE           CLUSTER-IP       EXTERNAL-IP    
 > PORT(S)        AGE
 >
-> service/blog   LoadBalancer   10.100.200.246   **192.168.74.81**  
+> service/blog   LoadBalancer   10.100.200.246   **192.168.74.87**  
 > 80:34241/TCP   17m
 >
 > \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
