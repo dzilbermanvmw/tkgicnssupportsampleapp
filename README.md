@@ -601,9 +601,8 @@ apiVersion: v1
 Navigate to the URL defined by EXTERNAL-IP address of LoadBalancer
 service:
 
-> ![](./media/image3.png){width="6.045113735783027in"
-> height="3.8285717410323707in"}
->
+> ![](./media/image3.png)
+
 > Now we can start using the Blog application as it is intedned --
 > posting blogs etc.
 
@@ -883,8 +882,7 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > Ghost app and check its availability (may need to update the DNS
 > record matching URL specified in deployment descriptor):
 >
-> ![](./media/image4.png){width="5.674956255468066in"
-> height="4.952975721784777in"}
+> ![](./media/image4.png)
 
  Troubleshooting Notes
 ---------------------
