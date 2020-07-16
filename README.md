@@ -43,17 +43,13 @@ steps to back up/restoring that aplication using Velero open source solution.
 
 Note: thanks to [Alexander
 Ullah](mailto:aullah@vmware.com?subject=Thanks%20for%20publishing%20TKG*%20CSI%20%22how%20to%22%20blog!)
-for creating a very helpful \"how to\"
-[blog](https://beyondelastic.com/2020/04/30/backup-and-migrate-tkgi-pks-to-tkg-with-velero/)
-for workload migration between K8s clusters with CSI which I took
-definition of the stateful [Ghost
-application](https://github.com/beyondelastic/velero_vSphere) from.
+for sharing definition of a stateful [Ghost
+application](https://github.com/beyondelastic/velero_vSphere) which I have used.
 
 Overview
 --------
 
-Cloud Native Storage (CNS) provides comprehensive data management for
-stateful, containerized apps, enabling apps to survive restarts and
+Cloud Native Storage (CNS) (https://docs.vmware.com/en/VMware-vSphere/6.7/Cloud-Native-Storage/GUID-CF1D7196-E49C-4430-8C50-F8E35CAAE060.html) provides comprehensive data management for stateful, containerized apps, enabling them to survive restarts and
 outages.
 
 CNS vSphere offers the following two components:
@@ -113,11 +109,10 @@ Install CSI Driver on a TGKI Cluster
 ------------------------------------
 
 Follow documentation: <https://docs.pivotal.io/pks/1-7/vsphere-cns.html>
-and use sample files provided
+and use configuration files provided in the 'samples' folder of this repository
 
-(provided input to Docs team for some inaccuracies which were corrected)
 
-1.  Create CSI Secret based on provided sample deployment file
+1.  Create CSI Secret for vSphere based on provided sample deployment file
     (*csi-vsphere.conf*)
 
 > \[Global\]
@@ -156,8 +151,7 @@ NOTES:
 > secret/vsphere-config-secret created
 
 2.  Create RBAC objects for CSI access based on provided sample
-    deployment file (*vsphere-csi-controller-rbac.yaml* included into
-    'samples' repository folder, partially shown below)
+    deployment file (*vsphere-csi-controller-rbac.yaml* in the 'samples' repository folder, also shown below)
 ```yaml
 kind: ServiceAccount
 apiVersion: v1
@@ -210,7 +204,7 @@ roleRef:
 > clusterrolebinding.rbac.authorization.k8s.io/vsphere-csi-controller-binding
 > created
 >
-> Verify that service account, cluster roles/cluster role binding exist
+> Verify that service account, cluster roles/cluster role bindings exist
 > in 'kube-system' namespace:
 >
 > **kubectl get serviceaccounts -n kube-system**
@@ -235,7 +229,7 @@ roleRef:
 > **vsphere-csi-controller-binding                         \<invalid\>**
 
 3.  Install the vSphere CSI Driver using sample manifest file
-    (*vsphere-csi-controller-ss.yaml* included into 'samples' repository
+    (*vsphere-csi-controller-ss.yaml* in the 'samples' repository
     folder)
 
 > **kubectl apply -f vsphere-csi-controller-ss.yaml**\
@@ -243,7 +237,7 @@ roleRef:
 > csidriver.storage.k8s.io/csi.vsphere.vmware.com created
 
     Optionally, monitor events in kube-system namespace to check
-initialization of vsphere-csi-controller:
+initialization of vsphere-csi-controller pods:
 
 > **kubectl get events -n kube-system**
 >
@@ -336,7 +330,7 @@ initialization of vsphere-csi-controller:
 > **vsphere-csi-node-p4wgc            3/3     Running           
 > 0          5m45s**
 
-6.  Verify that CRDs for CSI are deployed and working:
+6.  Verify that CRDs for CSI are deployed and activated:
 
 > **kubectl get CSINode**
 >
@@ -375,7 +369,7 @@ initialization of vsphere-csi-controller:
 > \
 > \....
 
-7.  Verification that CSI Driver is installed\
+7.  Verify that CSI Driver is installed\
     \
     **kubectl get csidrivers**\
     NAME                     CREATED AT\
@@ -395,15 +389,16 @@ initialization of vsphere-csi-controller:
 > ProviderID:                  
 > vsphere://421ce760-a829-deb2-82d9-45ff4fc5ec95
 >
-> Deploy Stateful Containerized Application
+
+Deploy Stateful Containerized Application
 -------------------------------------------
 >
-> We will simple simple Ghost blogging application that preserves state
+> We will use simple Ghost blogging application that preserves state
 > using PVC (source code available from
 > <https://github.com/beyondelastic/velero_vSphere>)
 
-1.  Create storage class that is using CSI driver (using demo-csi-strage-class.yaml
-    deployment descriptor file available in 'samples' folder)
+1.  Create storage class that is using CSI driver (using *demo-csi-storage-class.yaml*
+    deployment descriptor file available in 'samples' folder and shown below)
 ```yaml
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -425,7 +420,7 @@ NOTE: datastoreurl should point to a folder in the associated vSphere
 >
 > storageclass.storage.k8s.io/demo-sts-sc created
 >
-> Verify that storage class primitive has been created at K8s cluster
+> Verify that storage class object has been created at K8s cluster
 > level:
 >
 > **kubectl get sc**
@@ -436,9 +431,8 @@ NOTE: datastoreurl should point to a folder in the associated vSphere
 > demo-sts-sc (default) csi.vsphere.vmware.com Delete Immediate false
 > 4m40s
 
-2.  Create PVS using SC above and deploy Ghost app based on that PVC
-    (ghost-claim.yaml sample deployment descriptor is included into the
-    'samples' repository folder)
+2.  Create PVC using above stirage class and deploy Ghost app based on that PVC
+    (*ghost-claim.yaml* sample deployment descriptor in the 'samples' repository folder, also shown below)
 ```yaml
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -472,7 +466,7 @@ spec:
 >
 > **kubectl get pvc -n ghost**
 >
-> NAME               STATUS   VOLUME       CAPACITY   ACCESS MODES  
+> NAME  STATUS   VOLUME       CAPACITY   ACCESS MODES  
 > STORAGECLASS   AGE
 >
 > ***blog-content-new   Bound   
@@ -480,7 +474,7 @@ spec:
 > demo-sts-sc    119s***
 
 3.  Deploy Ghost stateful application (using *ghost-new.yaml* sample
-    deployment descriptor file found in the 'samples' folder, shown
+    deployment descriptor file in the 'samples' folder, shown
     below):
 ```yaml
 apiVersion: v1
@@ -544,7 +538,6 @@ spec:
 **kubectl apply -f ghost-new.yaml**
 
 > service/blog created
->
 > deployment.apps/blog created
 
 4.  Verify that all application objects have been created in the
@@ -562,39 +555,35 @@ spec:
 > service/blog   LoadBalancer   10.100.200.102   192.168.74.81  
 > 80:35713/TCP   10m
 >
-> NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+> NAME          READY   UP-TO-DATE           AVAILABLE   AGE
 >
 > deployment.apps/blog   1/1     1            1           10m
 
 .......
 
 Navigate to the URL defined by EXTERNAL-IP address of LoadBalancer
-service:
+service to access the application
 
 > ![](./media/image3.png)
 
 > Now we can start using the Blog application as it is intedned --
 > posting blogs etc.
 
-Install Velero Backup/Restore product w/support for CSI volume snapshots
+Install Velero Backup/Restore Solution w/support for CSI Volume Snapshots
 ------------------------------------------------------------------------
 
 1.  Install miniIO for local object store using [Helm3
     chart](https://bitnami.com/stack/minio/helm) from VMware Bitnami:
 
 > helm install minio-release -n minio \\
->
 > \--set access.Key.password=minio \\
->
 > \--set secretKey.password=minio123 \\
->
 > \--set persistence.storageClass=thin-disk \\
->
 > bitnami/minio
 >
 > NOTE: If access.Key.password and secretKey.password values are
 > different from those passed into Helm chart, you can retrieve their
-> values by:
+> values post deployment by running:
 >
 > **export MINIO\_ACCESS\_KEY=\$(kubectl get secret \--namespace minio
 > minio-release -o jsonpath=\"{.data.access-key}\" \| base64
@@ -606,15 +595,14 @@ Install Velero Backup/Restore product w/support for CSI volume snapshots
 >
 > **\
 > **use outputs of those commands in **credentials** file to provide
-> access to S3 object store (minIO) used in the script below:
+> access to S3 object store (minIO) shown below:
 >
 > \[default\]
 >
 >   aws\_access\_key\_id=mtTK1JFdwQ
->
 >   aws\_secret\_access\_key=minio123
 
-2.  Use the following command script to install Velero w/support for
+2.  Use the following shell command script to install Velero w/support for
     CSI:
 
 > export BUCKET=velero\
@@ -624,7 +612,7 @@ Install Velero Backup/Restore product w/support for CSI volume snapshots
 >   \--bucket \$BUCKET \\\
 >   \--secret-file ./credentials \\\
 >   \--backup-location-config
-> region=\$REGION,s3ForcePathStyle=\"true\",s3Url=<http://192.168.74.104>
+> region=\$REGION,s3ForcePathStyle=\"true\",s3Url=<http://MINIO IP:PORT>
 > \\\
 >   \--snapshot-location-config region=\$REGION \\\
 >   \--plugins velero/velero-plugin-for-aws:v1.1.0
@@ -632,7 +620,7 @@ Install Velero Backup/Restore product w/support for CSI volume snapshots
 > Follow <https://github.com/vmware-tanzu/velero-plugin-for-vsphere> to
 > install vSphere snapshot plugin (v 1.0.1!)
 
-3.  Add vSphere volume snapshot plugin
+3.  Add vSphere volume snapshot plugin, latest version (1.0.1 at the time of writing):
 
 > **velero plugin add
 > vsphereveleroplugin/velero-plugin-for-vsphere:1.0.1**
@@ -654,7 +642,7 @@ Install Velero Backup/Restore product w/support for CSI volume snapshots
 > vsl-vsphere-dz   [velero.io/vsphere](http://velero.io/vsphere)
 
         Optionally, verify that all pods, including  \"datamgr.\" to
-handle volume snapshots,  are running in the velero namespace:
+handle volume snapshots,  are running in the 'velero' namespace:
 
 > **kubectl get po -n velero**
 >
@@ -677,15 +665,15 @@ handle volume snapshots,  are running in the velero namespace:
 ------------------------------------------------
 
 1.  Using volume snapshot above, initiate backup of stateful application
-    Ghost namespace configured earlier:
+    Ghost using namespace 'ghost' configured earlier:
 
 > velero backup create ghost-backup3 \--include-namespaces=ghost
 > \--snapshot-volumes \--volume-snapshot-locations vsl-vsphere-dz
 >
 > Backup request \"ghost-backup1\" submitted successfully.
 >
-> Run \`velero backup describe ghost-backup1\` or \`velero backup logs
-> ghost-backup1\` for more details.
+> Run \`velero backup describe ghost-backup3\` or \`velero backup logs
+> ghost-backup3\` for more details.
 
 2.  Verify that backup completed successfully and volume snapshots were
     inlcuded:
@@ -821,7 +809,6 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > **kubectl get ns ghost**
 >
 > NAME    STATUS   AGE
->
 > ghost   Active   3m37s
 >
 > **kubectl get pvc -n ghost**
@@ -831,8 +818,9 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 >
 > blog-content-new   Bound    pvc-f9ec1bce-c2c1-4477-b118-e3b333a57151  
-> 2Gi              RWO                     demo-sts-sc    5m41s \<==
-> important to verify PVC is bound
+> 2Gi              RWO                     demo-sts-sc    5m41s \
+
+> NOTE: important to verify PVC is bound in the restore process
 >
 > **kubectl get po,svc -n ghost**
 >
@@ -908,8 +896,8 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > error=\"Post <https://your_vc_ip:443/sdk>: dial tcp: lookup
 > your\_vc\_ip on 192.168.2.10:53: server misbehaving\"\
 > \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--\
-> **Resolution**: make sure that DNS server is running and listening on
-> port 53, restart if needed
+> **Resolution**: make sure that DNS server is up & running and listening on
+> port 53, restart it, if needed
 >
 > 2\. Running backup using vSphere volume snapshot:
 >
