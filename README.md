@@ -755,9 +755,12 @@ handle volume snapshots,  are running in the 'velero' namespace:
 
 -   uploading volume snapshots may take a long time due to many
     processes happening on the background, make sure to check backup
-    upload status:
+    upload status returns data:
 
 > **kubectl -n velero get uploads**
+>
+>NAME                                          AGE
+>upload-56bfd6bc-be64-4ca6-b11b-4cbdedd4bbe9   101m
 
 Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 ----------------------------------------------------------------------
@@ -796,10 +799,8 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > Resources:\
 >   Included:        \*\
 >   Excluded:        nodes, events,
-> [events.events.k8s.io](http://events.events.k8s.io),
-> [backups.velero.io](http://backups.velero.io),
-> [restores.velero.io](http://restores.velero.io),
-> [resticrepositories.velero.io](http://resticrepositories.velero.io)\
+> [events.events.k8s.io],[backups.velero.io],
+> [restores.velero.io],[resticrepositories.velero.io]\
 >   Cluster-scoped:  auto\
 > \
 > Namespace mappings:  \<none\>\
@@ -809,7 +810,7 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
 4.  Check status of restored namespace, PVC, deployments, pods and
-    services: 
+    services in the target namespace: 
 
 > **kubectl get ns ghost**
 >
