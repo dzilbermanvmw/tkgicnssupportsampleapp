@@ -410,8 +410,8 @@ parameters:
   datastoreurl: "ds:///vmfs/volumes/13e49faf-a5872633/"
 ```
 > 
-NOTE: datastoreurl should point to a folder in the associated vSphere
-> data store:
+NOTE: datastoreurl should point to a folder path in the associated vSphere
+> Data Store:
 >
 > ![](./media/image1.png)
 >
@@ -570,7 +570,7 @@ service to access the Ghost application
 
 Install Velero Backup/Restore Solution w/support for CSI Volume Snapshots
 ------------------------------------------------------------------------
-NOTE: please see Velero project documentation (https://github.com/vmware-tanzu/velero/) for general fucntionality and architecture of that solution:
+NOTE: please see Velero project documentation (https://github.com/vmware-tanzu/velero/) for general functionality and architecture of that solution:
 
 1.  Install miniIO for local object store using [Helm3
     chart](https://bitnami.com/stack/minio/helm) from VMware Bitnami:
