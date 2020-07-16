@@ -583,8 +583,10 @@ NOTE: please see Velero project documentation (https://github.com/vmware-tanzu/v
 > \--set persistence.storageClass=thin-disk \\
 > bitnami/minio
 >
-> NOTE: If access.Key.password and secretKey.password values are
-> different from those passed into Helm chart, you can retrieve their
+> NOTES: 
+ - minIO itself uses peristent storage which can be implemented either using "legacy" storage class based on project Hatchway 
+  (use *storage-class.yaml* in the 'samples' folder) or the same CSI storage class used for stateful App above(using *demo-csi-storage-class.yaml*)    
+ - If access.Key.password and secretKey.password values are different from those passed into Helm chart, you can retrieve their
 > values post deployment by running:
 >
 > **export MINIO\_ACCESS\_KEY=\$(kubectl get secret \--namespace minio
@@ -602,6 +604,7 @@ NOTE: please see Velero project documentation (https://github.com/vmware-tanzu/v
 > \[default\]
 >
 >   aws\_access\_key\_id=mtTK1JFdwQ
+>
 >   aws\_secret\_access\_key=minio123
 
 2.  Use the following shell command script to install Velero w/support for
