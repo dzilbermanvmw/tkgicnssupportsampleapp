@@ -39,7 +39,7 @@ PKS) Kubernetes clusters and deploying applications that use persistent
 volumes. This document will provide details on configuration of CSI
 drivers in designated K8s cluster, deployment a stateful application
 using K8s storage class with CSI driver. Finally, there is an overview of 
-steps to back up/restoring that aplication using Velero open source solution.
+steps to back up/restore such an application using Velero open source solution.
 
 Note: thanks to [Alexander
 Ullah](mailto:aullah@vmware.com?subject=Thanks%20for%20publishing%20TKG*%20CSI%20%22how%20to%22%20blog!)
@@ -561,7 +561,7 @@ spec:
 .......
 
 Navigate to the URL defined by EXTERNAL-IP address of LoadBalancer
-service to access the application
+service to access the Ghost application
 
 > ![](./media/image3.png)
 
@@ -570,6 +570,7 @@ service to access the application
 
 Install Velero Backup/Restore Solution w/support for CSI Volume Snapshots
 ------------------------------------------------------------------------
+NOTE: please see Velero project documentation (https://github.com/vmware-tanzu/velero/) for general fucntionality and architecture of that solution:
 
 1.  Install miniIO for local object store using [Helm3
     chart](https://bitnami.com/stack/minio/helm) from VMware Bitnami:
