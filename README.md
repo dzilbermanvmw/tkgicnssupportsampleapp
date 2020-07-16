@@ -35,11 +35,11 @@ Introduction
 
 This document is a quick start guide for enabling CNS volume support on
 a Tanzu Kubernetes Grid Integrated (TKGI, formerly known as Enterprise
-PKS) Kubernetes clusters and deploying applications using persistent
+PKS) Kubernetes clusters and deploying applications that use persistent
 volumes. This document will provide details on configuration of CSI
 drivers in designated K8s cluster, deployment a stateful application
-using K8s storage class with CSI driver (OPTIONAL: and backing it
-up/restoring using Velero open source solution.
+using K8s storage class with CSI driver. Finally, there is an overview of 
+steps to back up/restoring that aplication using Velero open source solution.
 
 Note: thanks to [Alexander
 Ullah](mailto:aullah@vmware.com?subject=Thanks%20for%20publishing%20TKG*%20CSI%20%22how%20to%22%20blog!)
@@ -1004,11 +1004,4 @@ Delete & Restore Stateful App from Backup with vSphere Volume Snapshot
 > **Resolution**:  make sure all nodes in K8s cluster are running and
 > pods can be scheduled on them, wait for scheduler to retry (??)
 
-Conclusion
-----------
 
-We hope this document was useful. As you try these configuration steps,
-please provide any feedback or questions in the comments section for
-this document on [code.vmware.com](https://code.vmware.com). Also,
-please let us know if you have any suggestions or if you would like to
-see guidance on other topics
