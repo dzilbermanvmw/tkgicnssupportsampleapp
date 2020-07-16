@@ -395,7 +395,8 @@ initialization of vsphere-csi-controller:
 > ProviderID:                  
 > vsphere://421ce760-a829-deb2-82d9-45ff4fc5ec95
 >
-> []{#_Toc45744663 .anchor}Deploy Stateful Containerized Application
+> Deploy Stateful Containerized Application
+-------------------------------------------
 >
 > We will simple simple Ghost blogging application that preserves state
 > using PVC (source code available from
