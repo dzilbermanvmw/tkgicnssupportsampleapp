@@ -1,5 +1,8 @@
 Support for Cloud Native Storage (CNS) on TKGI Clusters with Stateful Application Example
 =========================================================================================
+![](./media/image6.png)
+
+Contents:
 
 [Support for Cloud Native Storage (CNS) on TKGI Clusters with Stateful
 Application Example
@@ -28,7 +31,6 @@ snapshots
 
 [Troubleshooting Notes 17](#troubleshooting-notes)
 
-[Conclusion 19](#conclusion)
 
 Introduction 
 ------------
