@@ -1,7 +1,6 @@
 VMware Advanced Customer Engagements (ACE) Team
 
-![](media/image2.png){width="1.1944444444444444in"
-height="0.18055555555555555in"}
+![](./media/image2.png)
 
 Contents:
 
@@ -121,8 +120,7 @@ CNS vSphere offers the following two components:
 
 -   vSphere volume driver in Kubernetes cluster
 
-![](media/image3.png){width="3.6714282589676293in"
-height="5.671428258967629in"}
+![](./media/image3.png)
 
 CNS control plane introduces a concept of volumes: **container volumes
 and persistent volumes** in vSphere. It is the Storage control plane for
@@ -540,8 +538,7 @@ Deploy Stateful Containerized Application
 -   *datastoreurl* should point to a folder path in the associated
     > vSphere Data Store:
 
-> ![](media/image4.png){width="5.833333333333333in"
-> height="2.6515146544181976in"}
+> ![](./media/image4.png)
 >
 > **kubectl apply -f csi-sc-dan.yaml -n ghost**
 >
@@ -585,8 +582,7 @@ Deploy Stateful Containerized Application
 > NOTE: on vSphere UI we can monitor tasks of creation of persistent
 > volume:
 >
-> ![](media/image5.png){width="5.833333333333333in"
-> height="0.5033945756780402in"}
+> ![](./media/image5.png)
 >
 > Verify that PVC is in "bound" state:
 >
@@ -607,8 +603,7 @@ Deploy Stateful Containerized Application
     volumes provisioned in Datastore via Monitor Cloud Native Storage
     Container Volumes view of vSphere client
 
-> ![](media/image6.png){width="6.178571741032371in"
-> height="1.9902602799650044in"}
+> ![](./media/image6.png)
 
 3.  Deploy Ghost stateful application that uses **blog-content-new** PVC
     created above to mount its **content** volume (use *ghost-new.yaml*
@@ -708,16 +703,14 @@ Deploy Ghost stateful application:
 > EXTERNAL-IP address of LoadBalancer service (and corresponding DNS
 > record) to access the Ghost application UI:
 >
-> ![](media/image7.png){width="5.614285870516185in"
-> height="3.530650699912511in"}
+> ![](./media/image7.png)
 >
 > Now we can start using the Ghost application as it is intended --
 > posting blogs, tagging contents etc. The configuration settings and
 > published blog content will be saved in the 'content' volume that is
 > using vSphere based persistent storage.
 >
-> ![](media/image8.png){width="5.321429352580927in"
-> height="3.9995188101487313in"}
+> ![](./media/image8.png)
 
 NOTE: Other, more complex multi-tier applications using Persistent
 volumes for Database tier (e.g. popular
